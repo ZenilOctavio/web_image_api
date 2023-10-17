@@ -1,0 +1,47 @@
+{% extends "root.html.jinja"%}
+
+{% block body %}
+
+<main>
+
+  <section>
+
+    <table>
+      <tr class="headers">
+        <th>Indice</th>
+        <th>Precio de apertura</th>
+        <th>Precio de cierre</th>
+        <th>% Cambio</th>
+      </tr>
+
+      {% for log in logs %}
+
+      <tr class="ticker">
+        <td class="name">{{ log["name"] }}</td>
+        <td class="open">${{ log["open"] }}</td>
+        <td class="close">${{ log["close"] }}</td>
+        {% if log["change"] > 0 %}
+          <td class="change" style="color:#59ac52">
+            +{{ log["change"] }}%
+          </td>
+        {% elif log["change"] < 0 %}
+          <td class="change" style="color:#f71e04">
+            {{ log["change"] }}%
+          </td>
+        {% else %}
+        <td class="change">
+          {{ log["change"] }}%
+        </td>
+        
+        {% endif %}
+    
+      {% endfor %}
+      
+    </table>
+    
+  </section>
+
+</main>
+
+
+{% endblock %}

@@ -1,0 +1,16 @@
+selector main
+context {
+  logs: list[
+    dict {
+      name: str,
+      open: float,
+      close: float,
+      change: float
+    }
+  ]
+
+}
+
+
+
+
