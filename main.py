@@ -1,7 +1,9 @@
-from WebImageCreator.component_retriever import ComponentRetriever
+from WebImageCreator.image_creator import ImageCreator
 
-retriever = ComponentRetriever('./components')
-components = retriever.read_components()
+image_creator = ImageCreator()
 
-print(components)
+content = image_creator.use_component('first_component', {'logs': [{ "name": 'SP&500', "open": 500, "close": 600, "change": 20.5 }]})
 
+with open('./photo.png','wb') as photo:
+  photo.write(content.read())
+  photo.close()

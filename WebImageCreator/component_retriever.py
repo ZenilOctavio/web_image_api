@@ -36,7 +36,10 @@ class ComponentRetriever:
     
     self.__path = new_path
 
-
+  @property
+  def Components(self) -> list[Component]:
+    return self.__components
+    
   def read_components(self) -> list[Component]:
     if not self.__directory_parsed():
       raise ComponentDirectoryException('Component directory is not correcly parsed')

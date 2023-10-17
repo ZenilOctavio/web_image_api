@@ -10,6 +10,7 @@ def ExceptionFactory(exception_name: str):
 
 ComponentPathException = ExceptionFactory('ComponentPathException')
 ComponentDirectoryException = ExceptionFactory('ComponentDirectoryException')
-ComponentFileException = ExceptionFactory('ComponentFiles')
+ComponentFileException = ExceptionFactory('ComponentFileException')
+ComponentFindException = ExceptionFactory('ComponentFindException')
 
 
