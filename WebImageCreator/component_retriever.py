@@ -53,9 +53,9 @@ class ComponentRetriever:
         continue
 
       html_file = open(os.path.join(os.path.abspath(self.__path),'jinja2',directory,'file.jinja'))
-      css_file = open(os.path.join(os.path.abspath(self.__path),'jinja2',directory,'file.jinja'))
+      css_file = open(os.path.join(os.path.abspath(self.__path),'jinja2',directory,'file.css'))
       
-      components.append(Component(directory.split('.')[0],'main',html_file.read(),css_file.read()))
+      components.append(Component(directory.split('.')[0],'section',html_file.read(),css_file.read()))
 
       html_file.close()
       css_file.close()

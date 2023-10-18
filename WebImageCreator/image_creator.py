@@ -4,9 +4,9 @@ from .exceptions import ComponentFindException
 import os
 from typing import Union
 from playwright.sync_api import sync_playwright
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 from .constants import DEFAULT_COMPONENTS_FOLDER, DEFAULT_JINJA2_FOLDER
-from io import BufferedRandom
+from io import BytesIO
 
 class ImageCreator:
   
@@ -15,6 +15,7 @@ class ImageCreator:
     self.__retriever.read_components()
     self.__playwright = sync_playwright().start()
     self.__browser = self.__playwright.chromium.launch()
+    self.__env = Environment(loader=FileSystemLoader(os.path.join(path_to_components, DEFAULT_JINJA2_FOLDER)))
     
   
   def get_components(self) -> list[Component]:
@@ -32,23 +33,21 @@ class ImageCreator:
   
     raise ComponentFindException(f'No such component with name {component_name}')
   
-  def use_component(self, component: Union[str, Component], context: dict) -> BufferedRandom:
+  def use_component(self, component: Union[str, Component], context: dict) -> BytesIO:
     
     if isinstance(component, str):
       component = self.get_component(component)
     
     page = self.__browser.new_page()
     
-    template = Template(component.html_file)
+    template = self.__env.from_string(component.html_file)
     rendered_template = template.render(context)
 
     page.set_content(rendered_template)
-    page.add_script_tag(component.css_file)
+    page.add_style_tag(content=component.css_file)
     photo_bytes = page.query_selector(component.selector).screenshot(type='png')
 
-    # page = self.__browser.new_page()
-    
-    buffer = BufferedRandom(photo_bytes)
+    buffer = BytesIO(photo_bytes)    
     
     return buffer
     
