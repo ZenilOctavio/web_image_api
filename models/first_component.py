@@ -10,8 +10,8 @@ class TickerData(BaseModel):
     return {"name": self.name, "open": self.open, "close": self.close, "change": self.change}
 
 class TickerDataList(BaseModel):
-  tickers: list[TickerData]
+  logs: list[TickerData]
 
   def json(self) -> list[TickerData]:
-    return [ticker.json() for ticker in self.tickers]
+    return {"logs": [ticker.json() for ticker in self.logs]}
     
