@@ -7,19 +7,20 @@ from playwright.async_api import async_playwright
 from jinja2 import Environment, FileSystemLoader
 from .constants import DEFAULT_COMPONENTS_FOLDER, DEFAULT_JINJA2_FOLDER
 from io import BytesIO
+import asyncio
 
 class ImageCreator:
+
+  # async def __initialize_playwright(self):
+  #   self.__playwright = await async_playwright().start()
+  #   self.__browser = await self.__playwright.chromium.launch()
   
   def __init__(self, path_to_components: str = os.path.join('.', DEFAULT_COMPONENTS_FOLDER)):
     self.__retriever = ComponentRetriever(path_to_components)
     self.__retriever.read_components()
     self.__env = Environment(loader=FileSystemLoader(os.path.join(path_to_components, DEFAULT_JINJA2_FOLDER)))
-    self.__initialize_playwright()
+    # asyncio.run(self.__initialize_playwright())
 
-  async def __initialize_playwright(self):
-    self.__playwright = await async_playwright().start()
-    self.__browser = await self.__playwright.chromium.launch()
-  
   async def get_components(self) -> list[Component]:
     return self.__retriever.Components
   
@@ -35,21 +36,33 @@ class ImageCreator:
   
     raise ComponentFindException(f'No such component with name {component_name}')
   
-  async def use_component(self, component: Union[str, Component], context: dict) -> BytesIO:
+  async def use_component(self, component: Union[str, Component], context: dict) -> bytes:
     
-    if isinstance(component, str):
-      component = self.get_component(component)
+    async with async_playwright() as pw:
+      browser = await pw.chromium.launch()
+      
+      if isinstance(component, str):
+        component = await self.get_component(component)
     
-    page = await self.__browser.new_page()
+      page = await browser.new_page()
+      print(page)
+    # try:
+    #   print(browser)
+    #   page = await browser.new_page()
+    # except:
+    #   print('Couldn\'t create a new page instance')
+    #   return None
     
-    template = self.__env.from_string(component.html_file)
-    rendered_template = template.render(context)
+      template = self.__env.from_string(component.html_file)
+      rendered_template = template.render(context)
 
-    page.set_content(rendered_template)
-    page.add_style_tag(content=component.css_file)
-    photo_bytes = page.query_selector(component.selector).screenshot(type='png')
+      # print(rendered_template)
+      # print(context)
 
-    buffer = BytesIO(photo_bytes)    
-    
-    return buffer
-    
+      await page.set_content(rendered_template)
+      # print(await page.content())
+      await page.add_style_tag(content=component.css_file)
+
+      image_bytes = await (await page.query_selector(component.selector)).screenshot(type='png')
+    # await browser.close()
+      return image_bytes
