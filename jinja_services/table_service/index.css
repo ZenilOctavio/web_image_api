@@ -1,0 +1,78 @@
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  main{
+    display: flex;
+  }
+  
+  section{
+    padding: 1rem;
+  }
+  
+  table{
+    border-collapse: collapse;
+  }
+  
+  
+  
+  tr.headers{
+    background-color: #919191;
+    color: white;
+  }
+  
+  
+  th{
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  tr:last-child > td:first-child{
+    /* background-color: #919191; */
+    border-bottom-left-radius: 0.5rem;
+  }
+  
+  tr:last-child > td{
+    border-bottom: none;
+  }
+  
+  td, th{
+    padding: 0.5rem;
+    border-bottom: 2px solid #b7b3b3;
+  }
+  
+  tr.headers > th{
+    border: none;
+  }
+  
+  tr.headers > th:first-child{
+    border-top-left-radius: 0.5rem;
+  }
+  
+  tr.headers > th:last-child{
+    border-top-right-radius: 0.5rem;
+  }
+  
+  td:first-child{
+    border-left: 2px solid #b7b3b3;
+  }
+  
+  td:last-child{
+    border-right: 2px solid #b7b3b3;
+  }
+  
+  td{
+    text-align: right;
+  }
+  
+  td.name, td.change{
+    font-weight: 600;
+  }
+  
+  td.change{
+    color: #59ac52;
+  }
+  
+  
+  
+  

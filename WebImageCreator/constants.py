@@ -1,2 +1,1 @@
-DEFAULT_COMPONENTS_FOLDER = 'components'
-DEFAULT_JINJA2_FOLDER = 'jinja2'
+DEFAULT_SERVICES_FOLDER = 'jinja_services'
